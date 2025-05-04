@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desemission - Разработка мобильных приложений</title>
+    <!-- Font Awesome с async для оптимизации -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" async>
+    <!-- Google Fonts с preload для ускорения -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" as="style" onload="this.rel='stylesheet'">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: #0a192f;
+            color: #ffffff;
+            overflow-x: hidden;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 50px;
+            background: #0a192f;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #3b82f6;
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .logo::after {
+            content: ' ';
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: rgba(59, 130, 246, 0.3);
+            transform: translate(2px, 2px);
+            z-index: -1;
+            animation: echo 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6; }
+            to { text-shadow: 0 0 10px #3b82f6, 0 0 20px #3b82f6; }
+        }
+
+        @keyframes echo {
+            from { transform: translate(2px, 2px); opacity: 0.3; }
+            to { transform: translate(4px, 4px); opacity: 0.5; }
+        }
+
+        /* Bottom Button Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0a192f;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            transform: translateY(100px);
+            animation: slideUp 0.5s ease-out forwards 0.5s;
+        }
+
+        @keyframes slideUp {
+            to { transform: translateY(0); }
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            background: #1e40af;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+        }
+
+        .nav-btn i {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #3b82f6;
+            background: #3b82f6;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: #0a192f;
+            padding: 0 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.1), transparent);
+            z-index: -1;
+        }
+
+        /* Hexagon Decorations */
+        .hexagon {
+            position: absolute;
+            width: 100px;
+            height: 57.74px;
+            background: rgba(59, 130, 246, 0.1);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: floatHex 8s infinite ease-in-out;
+        }
+
+        .hexagon:nth-child(1) { top: 10%; left: 10%; }
+        .hexagon:nth-child(2) { top: 20%; right: 15%; }
+        .hexagon:nth-child(3) { bottom: 15%; left: 20%; }
+        .hexagon:nth-child(4) { bottom: 10%; right: 10%; }
+
+        @keyframes floatHex {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: slideIn 1s ease-out;
+            position: relative;
+        }
+
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: #3b82f6;
+            transform: translateX(-50%);
+            animation: underline 1.5s ease-out forwards 1s;
+        }
+
+        @keyframes underline {
+            to { width: 50%; }
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin-bottom: 30px;
+            color: #94a3b8;
+        }
+
+        .hero .cta {
+            background: #3b82f6;
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hero .cta:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #3b82f6;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Particle Animation for Hero */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-20px); opacity: 0.8; }
+        }
+
+        /* Section Divider */
+        .divider {
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #3b82f6, #1e40af);
+            animation: gradientShift 5s infinite linear;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 50px;
+            text-align: center;
+            background: #0a192f;
+            position: relative;
+        }
+
+        .pricing::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(59, 130, 246, 0.1), transparent);
+            z-index: -1;
+            background-image: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%233b82f6" fill-opacity="0.05"%3E%3Cpath d="M0 0h20v20H0z"/%3E%3C/g%3E%3C/svg%3E');
+        }
+
+        .pricing h2 {
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: #3b82f6;
+            position: relative;
+        }
+
+        .pricing h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: #3b82f6;
+            transform: translateX(-50%);
+            animation: underline 1.5s ease-out forwards;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Connecting Lines for Pricing Cards */
+        .pricing-grid::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            animation: pulseLine 3s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        @keyframes pulseLine {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .pricing-card {
+            background: #1e40af;
+            padding: 30px;
+            border-radius: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 1s ease-out;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            border: 2px solid #3b82f6;
+        }
+
+        .pricing-card i {
+            font-size: 2em;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .pricing-card p {
+            font-size: 1.2em;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 100px 50px;
+            text-align: center;
+            background: #0a192f;
+            position: relative;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.1), transparent);
+            z-index: -1;
+            background-image: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%233b82f6" fill-opacity="0.05"%3E%3Cpath d="M0 0h20v20H0z"/%3E%3C/g%3E%3C/svg%3E');
+        }
+
+        .contact h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #3b82f6;
+            position: relative;
+        }
+
+        .contact h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: #3b82f6;
+            transform: translateX(-50%);
+            animation: underline 1.5s ease-out forwards;
+        }
+
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            background: #3b82f6;
+            color: #ffffff;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            animation: fadeInContact 0.5s ease-out forwards;
+            position: relative;
+        }
+
+        .contact-btn:nth-child(1) { animation-delay: 0.2s; }
+        .contact-btn:nth-child(2) { animation-delay: 0.4s; }
+
+        .contact-btn i {
+            margin-right: 10px;
+            font-size: 1.2em;
+            animation: pulseIcon 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes fadeInContact {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .contact-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #3b82f6;
+        }
+
+        /* Footer */
+        footer {
+            padding: 20px;
+            text-align: center;
+            background: #0a192f;
+            color: #94a3b8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            header {
+                padding: 20px;
+            }
+
+            .bottom-nav {
+                gap: 10px;
+                padding: 10px 0;
+            }
+
+            .nav-btn {
+                padding: 8px 15px;
+                font-size: 0.8em;
+            }
+
+            .nav-btn i {
+                margin-right: 5px;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hexagon {
+                width: 60px;
+                height: 34.64px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"> </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="particles" id="particles"></div>
+        <div class="hexagon"></div>
+        <div class="hexagon"></div>
+        <div class="hexagon"></div>
+        <div class="hexagon"></div>
+        <h1>Разработка мобильных приложений</h1>
+        <p>Создаю стильные и функциональные приложения под ваши идеи. Быстро, качественно, доступно.</p>
+        <a href="#contact" class="cta">Связаться со мной</a>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="pricing" id="pricing">
+        <h2>Тарифы</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <i class="fas fa-rocket"></i>
+                <h3>Базовый</h3>
+                <p>от 500 ₽</p>
+                <span>Простое приложение с базовым функционалом</span>
+            </div>
+            <div class="pricing-card">
+                <i class="fas fa-star"></i>
+                <h3>Стандарт</h3>
+                <p>от 1500 ₽</p>
+                <span>Приложение с кастомным дизайном и API для всех версии Android</span>
+            </div>
+            <div class="pricing-card">
+                <i class="fas fa-crown"></i>
+                <h3>Премиум</h3>
+                <p>от 3000 ₽</p>
+                <span>Полный цикл разработки с уникальными фишками,также выдаётся разработчик панель</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="contact" id="contact">
+        <h2>Связаться со мной</h2>
+        <div class="contact-buttons">
+            <a href="https://t.me/desemission" target="_blank" class="contact-btn">
+                <i class="fab fa-telegram-plane"></i> @desemission
+            </a>
+            <a href="https://t.me/nevertimex" target="_blank" class="contact-btn">
+                <i class="fab fa-telegram"></i> Канал @nevertimex
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Desemission. Все права защищены.</p>
+    </footer>
+
+    <nav class="bottom-nav">
+        <a href="#home" class="nav-btn"><i class="fas fa-home"></i> Главная</a>
+        <a href="#pricing" class="nav-btn"><i class="fas fa-tags"></i> Цены</a>
+        <a href="#contact" class="nav-btn"><i class="fas fa-envelope"></i> Контакты</a>
+    </nav>
+
+    <script>
+        // Плавный скролл для навигации
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Анимация при скролле
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        document.querySelectorAll('.pricing-card, .contact-btn').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Particle Animation
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.width = `${Math.random() * 5 + 5}px`;
+            particle.style.height = particle.style.width;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>
